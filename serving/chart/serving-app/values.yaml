@@ -1,0 +1,26 @@
+replicaCount: 1
+
+image:
+  repository: 766100806765.dkr.ecr.us-east-1.amazonaws.com/serving-app
+  tag: ""
+
+service:
+  type: ClusterIP
+  port: 8000
+
+resources:
+   limits:
+     cpu: 100m
+     memory: 128Mi
+   requests:
+     cpu: 100m
+     memory: 128Mi
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
