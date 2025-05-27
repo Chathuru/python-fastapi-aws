@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: 766100806765.dkr.ecr.us-east-1.amazonaws.com/serving-app
+  repository: serving-app
   tag: ""
 
 service:

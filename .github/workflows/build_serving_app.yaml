@@ -51,7 +51,7 @@ jobs:
 
     - name: Update Kubeconfig
       if: success()
-      run: aws eks update-kubeconfig --name offline-dev-proxy-eks
+      run: aws eks update-kubeconfig --name eks-cluster
 
     - name: Deply the application
       run: helm upgrade --install app serving/chart/serving-app --set image.tag=${GITHUB_RUN_NUMBER}

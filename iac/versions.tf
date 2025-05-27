@@ -5,7 +5,6 @@ terraform {
     key     = "state"
     profile = "default"
     encrypt = true
-
   }
   required_providers {
     aws = {
