@@ -1,0 +1,17 @@
+name: Build the Serving application
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'serving/**'
+      - 'tests/**'
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4

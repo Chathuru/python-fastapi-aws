@@ -1,0 +1,28 @@
+name: Build the Serving application
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'serving/**'
+      - 'tests/**'
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Python3
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12.3'
+
+    - name: Install Dependencies
+      run: pip3 install -r serving/requirements.txt
+
+    - name: Run Unit Test
+      run: pytest
