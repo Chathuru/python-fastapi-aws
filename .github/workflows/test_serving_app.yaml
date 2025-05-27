@@ -1,4 +1,4 @@
-name: Build the Serving application
+name: Test the serving application
 
 on:
   push:
@@ -7,6 +7,11 @@ on:
     paths:
       - 'serving/**'
       - 'tests/**'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'iac/**'
 
 jobs:
   setup:
@@ -19,7 +24,7 @@ jobs:
     - name: Setup Python3
       uses: actions/setup-python@v5
       with:
-        python-version: '3.12.3'
+        python-version: '3.12'
 
     - name: Install Dependencies
       run: pip3 install -r serving/requirements.txt

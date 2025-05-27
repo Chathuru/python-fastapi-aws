@@ -15,3 +15,43 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
+    - name: Setup Python3
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12.3'
+
+    - name: Install Dependencies
+      if: success()
+      run: pip3 install -r serving/requirements.txt
+
+    - name: Run Unit Test
+      if: success()
+      run: pytest
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v2
+      id: login-ecr
+
+    - name: Build the docker image
+      if: success()
+      working-directory: serving
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      run: |
+        docker build . -t ${ECR_REGISTRY}/serving-app:${GITHUB_RUN_NUMBER}
+        docker push ${ECR_REGISTRY}/serving-app:${GITHUB_RUN_NUMBER}
+
+    - name: Update Kubeconfig
+      if: success()
+      run: aws eks update-kubeconfig --name offline-dev-proxy-eks
+
+    - name: Deply the application
+      run: helm upgrade --install app serving/chart/serving-app --set image.tag=${GITHUB_RUN_NUMBER}
