@@ -20,6 +20,7 @@ livenessProbe:
   httpGet:
     path: /
     port: http
+
 readinessProbe:
   httpGet:
     path: /
